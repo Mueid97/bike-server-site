@@ -20,7 +20,8 @@ async function run(){
   try{
     await client.connect();
     const productCollection = client.db('bikersdb').collection('product');
-
+    const myItemCollection = client.db('bikersdb').collection('items');
+    
     app.get('/product', async(req,res)=>{
         const query = {};
         const cursor = productCollection.find(query);
@@ -46,6 +47,12 @@ async function run(){
         const id =req.params.id;
         const query = {_id: ObjectId(id)};
         const result = await productCollection.deleteOne(query);
+        res.send(result);
+    });
+
+    app.post('/items', async(req,res)=>{
+        const item = req.body;
+        const result = myItemCollection.insertOne(item);
         res.send(result);
     })
 
